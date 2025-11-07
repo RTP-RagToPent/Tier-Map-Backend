@@ -46,7 +46,7 @@ supabase db dump --file schema.sql --linked
 Dockerを使ってローカルSupabaseインスタンスを起動します：
 
 ```bash
-supabase start
+supabase functions serve --env-file .env.local
 ```
 
 このコマンドは以下のサービスを起動します：
@@ -77,12 +77,12 @@ http://localhost:54323
 ローカル開発時は、以下の環境変数を設定してください：
 
 ```env
-SUPABASE_URL=http://localhost:54321
-SUPABASE_ANON_KEY=ANON_KEY
-DATABASE_URL=postgresql://postgres:postgres@localhost:54322/postgres
-```
+# Frontend Base URL
+FRONTEND_BASE_URL=__REPLACE_FRONTEND_BASE_URL__
 
-実際のキーは `supabase start` コマンド実行後に表示されます。
+# ENV
+ENV=development
+```
 
 ## ライセンス
 
