@@ -63,7 +63,29 @@ supabase start
 psql -h 127.0.0.1 -p 54322 -U postgres -d postgres -f schema.sql
 ```
 
-### 7. 開発環境の確認
+パスワードを求められた時には「**postgres**」と入力してください
+
+### 7. 環境変数の設定
+
+ローカル開発時は、以下の環境変数を`.env.local`に設定してください：
+
+```env
+# Frontend Base URL
+FRONTEND_BASE_URL=__REPLACE_FRONTEND_BASE_URL__
+
+# ENV
+ENV=development
+```
+
+### 8. edge functionをローカルで起動
+
+edge functionをローカルで起動します。
+
+```bash
+supabase functions serve --env-file .env.local
+```
+
+### 9. 開発環境の確認
 
 ブラウザで以下のURLにアクセスして、Supabase
 Studioが正常に動作していることを確認します：
@@ -71,18 +93,6 @@ Studioが正常に動作していることを確認します：
 ```text
 http://localhost:54323
 ```
-
-## 環境変数の設定
-
-ローカル開発時は、以下の環境変数を設定してください：
-
-```env
-SUPABASE_URL=http://localhost:54321
-SUPABASE_ANON_KEY=ANON_KEY
-DATABASE_URL=postgresql://postgres:postgres@localhost:54322/postgres
-```
-
-実際のキーは `supabase start` コマンド実行後に表示されます。
 
 ## ライセンス
 
