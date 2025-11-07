@@ -46,7 +46,7 @@ supabase db dump --file schema.sql --linked
 Dockerを使ってローカルSupabaseインスタンスを起動します：
 
 ```bash
-supabase functions serve --env-file .env.local
+supabase start
 ```
 
 このコマンドは以下のサービスを起動します：
@@ -63,18 +63,11 @@ supabase functions serve --env-file .env.local
 psql -h 127.0.0.1 -p 54322 -U postgres -d postgres -f schema.sql
 ```
 
-### 7. 開発環境の確認
+パスワードを求められた時には「**postgres**」と入力してください
 
-ブラウザで以下のURLにアクセスして、Supabase
-Studioが正常に動作していることを確認します：
+### 7. 環境変数の設定
 
-```text
-http://localhost:54323
-```
-
-## 環境変数の設定
-
-ローカル開発時は、以下の環境変数を設定してください：
+ローカル開発時は、以下の環境変数を`.env.local`に設定してください：
 
 ```env
 # Frontend Base URL
@@ -82,6 +75,23 @@ FRONTEND_BASE_URL=__REPLACE_FRONTEND_BASE_URL__
 
 # ENV
 ENV=development
+```
+
+### 8. edge functionをローカルで起動
+
+edge functionをローカルで起動します。
+
+```bash
+supabase functions serve --env-file .env.local
+```
+
+### 9. 開発環境の確認
+
+ブラウザで以下のURLにアクセスして、Supabase
+Studioが正常に動作していることを確認します：
+
+```text
+http://localhost:54323
 ```
 
 ## ライセンス
