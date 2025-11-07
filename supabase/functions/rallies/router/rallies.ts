@@ -6,6 +6,7 @@ export async function ralliesRouter({
   req,
   rallyId,
   profileId,
+  accessToken,
   method,
   pathLength,
   corsHeaders,
@@ -13,11 +14,12 @@ export async function ralliesRouter({
   req: Request;
   rallyId?: number;
   profileId: number;
+  accessToken: string;
   method: string;
   pathLength: number;
   corsHeaders: Record<string, string>;
 }): Promise<Response> {
-  const ralliesController = new RalliesController();
+  const ralliesController = new RalliesController(accessToken);
 
   if (pathLength === 1) {
     if (method === "GET") {
@@ -41,7 +43,7 @@ export async function ralliesRouter({
     } else if (method === "POST") {
       try {
         const { name, genre } = await req.json();
-        const data = await ralliesController.create({ name, genre });
+        const data = await ralliesController.create({ name, genre, profileId });
         const { status, message } = httpResponse.CREATED;
 
         return new Response(JSON.stringify({ message, data }), {

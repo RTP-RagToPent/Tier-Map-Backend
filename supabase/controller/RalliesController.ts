@@ -11,25 +11,29 @@ import {
 } from "../usecase/rally/UpdateUseCase.ts";
 
 class RalliesController {
-  constructor(private repository = new SupabaseRallyRepository()) {}
+  constructor(private accessToken: string) {}
 
   async index({ profileId }: { profileId: number }) {
-    const useCase = new ListRallyUseCase(this.repository);
+    const repository = new SupabaseRallyRepository(this.accessToken);
+    const useCase = new ListRallyUseCase(repository);
     return await useCase.execute(profileId);
   }
 
   async create(request: CreateRallyUseCaseRequest) {
-    const useCase = new CreateRallyUseCase(this.repository);
+    const repository = new SupabaseRallyRepository(this.accessToken);
+    const useCase = new CreateRallyUseCase(repository);
     return await useCase.execute(request);
   }
 
   async show(rallyId: number) {
-    const useCase = new ShowRallyUseCase(this.repository);
+    const repository = new SupabaseRallyRepository(this.accessToken);
+    const useCase = new ShowRallyUseCase(repository);
     return await useCase.execute(rallyId);
   }
 
   async update(request: UpdateRallyUseCaseRequest) {
-    const useCase = new UpdateRallyUseCase(this.repository);
+    const repository = new SupabaseRallyRepository(this.accessToken);
+    const useCase = new UpdateRallyUseCase(repository);
     return await useCase.execute(request);
   }
 }

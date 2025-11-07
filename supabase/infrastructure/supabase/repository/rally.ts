@@ -8,8 +8,8 @@ import { createSupabaseClient } from "../client.ts";
 class SupabaseRallyRepository implements IRallyRepository {
   private readonly client;
 
-  constructor() {
-    this.client = createSupabaseClient();
+  constructor(accessToken: string) {
+    this.client = createSupabaseClient(accessToken);
   }
 
   async list(profileId: number): Promise<Rally[]> {
@@ -53,10 +53,11 @@ class SupabaseRallyRepository implements IRallyRepository {
       });
   }
 
-  async create(name: Name, genre: Genre): Promise<Rally> {
+  async create(name: Name, genre: Genre, profileId: number): Promise<Rally> {
     return await this.client.from("rallies")
       .insert({
         name: name.getValue(),
+        profile_id: profileId,
         genre: genre.getValue(),
       })
       .select("id, name, genre")

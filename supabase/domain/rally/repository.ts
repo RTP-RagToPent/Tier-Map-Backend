@@ -6,7 +6,7 @@ import { Rally } from "./models/Rally.ts";
 type IRallyRepository = {
   list(profileId: number): Promise<Rally[]>;
   findById(rallyId: Id): Promise<Rally | null>;
-  create(name: Name, genre: Genre): Promise<Rally>;
+  create(name: Name, genre: Genre, profileId: number): Promise<Rally>;
   update(rally: Rally): Promise<Rally>;
 };
 

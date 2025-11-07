@@ -1,6 +1,8 @@
 import "@supabase/functions-js/edge-runtime.d.ts";
 
-import { frontendBaseUrl, isDevelopment } from "../../lib/config/env.ts";
+import { ProfilesController } from "../../controller/ProfilesController.ts";
+import { authenticate } from "../../infrastructure/supabase/auth.ts";
+import { frontendBaseUrl } from "../../lib/config/env.ts";
 import { httpResponse } from "../../lib/httpResponse.ts";
 import { errorLog } from "../../lib/log.ts";
 import { parseInt } from "../../lib/parse.ts";
@@ -10,23 +12,39 @@ console.log("Rallies API Function!");
 
 Deno.serve(async (req: Request) => {
   const corsHeaders: Record<string, string> = {
-    ...(isDevelopment
-      ? {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": "false",
-      }
-      : {
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Origin": frontendBaseUrl,
-      }),
+    "Access-Control-Allow-Origin": frontendBaseUrl,
+    "Access-Control-Allow-Credentials": "true",
     "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "authorization, content-type",
   };
 
   try {
     const { url: reqUrl, method } = req;
-    // TODO: Credentialからuser_idを取得してuser_idを元にprofileIdをセットする
-    const profileId = 1;
+
+    const cookieHeader = req.headers.get("cookie");
+    const authResult = await authenticate(cookieHeader);
+    if (!authResult) {
+      const { status, message } = httpResponse.UNAUTHORIZED;
+      return new Response(JSON.stringify({ message }), {
+        status,
+        headers: corsHeaders,
+      });
+    }
+
+    const { userId, accessToken } = authResult;
+    const profilesController = new ProfilesController(accessToken);
+    const data = await profilesController.show(userId);
+    console.log(data);
+
+    if (!data) {
+      const { status, message } = httpResponse.NOT_FOUND;
+      return new Response(JSON.stringify({ message }), {
+        status,
+        headers: corsHeaders,
+      });
+    }
+
+    const profileId = data.id;
 
     const url = new URL(reqUrl);
     const pathname = url.pathname;
@@ -57,6 +75,7 @@ Deno.serve(async (req: Request) => {
           req,
           profileId,
           rallyId,
+          accessToken,
           method,
           pathLength,
           corsHeaders,

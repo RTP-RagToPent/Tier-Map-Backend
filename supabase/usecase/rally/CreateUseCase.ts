@@ -6,6 +6,7 @@ import { errorLog } from "../../lib/log.ts";
 export type CreateRallyUseCaseRequest = {
   name: string;
   genre: string;
+  profileId: number;
 };
 
 export type CreateRallyUseCaseResponse = {
@@ -24,7 +25,11 @@ class CreateRallyUseCase {
       const name = Name.of(request.name);
       const genre = Genre.of(request.genre);
 
-      const rally = await this.repository.create(name, genre);
+      const rally = await this.repository.create(
+        name,
+        genre,
+        request.profileId,
+      );
 
       return {
         id: rally.getId().getValue(),

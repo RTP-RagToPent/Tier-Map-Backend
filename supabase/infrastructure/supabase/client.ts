@@ -7,10 +7,12 @@ import {
   supabaseUrl,
 } from "../../lib/config/supabase.ts";
 
-function createSupabaseClient() {
+function createSupabaseClient(accessToken: string) {
   return isDevelopment
     ? createClient(supabaseUrl, supabaseServiceRoleKey)
-    : createClient(supabaseUrl, supabaseAnonKey);
+    : createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: `Bearer ${accessToken}` } },
+    });
 }
 
 export { createSupabaseClient };
