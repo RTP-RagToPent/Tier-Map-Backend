@@ -1,6 +1,2 @@
-if [ -d "supabase/functions" ] && [ "$(ls -A supabase/functions/)" ]; then
-  deno lint supabase/functions/
-  deno fmt --check supabase/functions/
-else
-  echo "No functions found in supabase/functions/, skipping lint"
-fi
+deno lint supabase/
+deno fmt --check supabase/
