@@ -37,6 +37,7 @@ Cookie: ${COOKIE}
 | POST     | /functions/v1/rallies/                           | ラリー作成             |
 | GET      | /functions/v1/rallies/:rally_id/                 | ラリー詳細取得         |
 | PATCH    | /functions/v1/rallies/:rally_id/                 | ラリー更新             |
+| DELETE   | /functions/v1/rallies/:rally_id/                 | ラリー削除             |
 | GET      | /functions/v1/rallies/:rally_id/spots            | ラリースポット一覧取得 |
 | POST     | /functions/v1/rallies/:rally_id/spots            | ラリースポット登録     |
 | GET      | /functions/v1/rallies/:rally_id/spots/:spot_id   | ラリースポット詳細取得 |
@@ -136,7 +137,7 @@ Cookie: ${COOKIE}
 
 ## ラリーAPI
 
-### 3. ラリー一覧取得
+### 1. ラリー一覧取得
 
 ログインユーザーが作成したラリーの一覧を取得します。
 
@@ -183,7 +184,7 @@ Cookie: ${COOKIE}
 
 ---
 
-### 4. ラリー作成
+### 2. ラリー作成
 
 新しいラリーを作成します。
 
@@ -236,7 +237,7 @@ Cookie: ${COOKIE}
 
 ---
 
-### 5. ラリー詳細取得
+### 3. ラリー詳細取得
 
 指定したラリーの詳細情報を取得します。
 
@@ -281,7 +282,7 @@ Cookie: ${COOKIE}
 
 ---
 
-### 6. ラリー更新
+### 4. ラリー更新
 
 指定したラリーの情報を更新します。
 
@@ -340,9 +341,32 @@ Cookie: ${COOKIE}
 
 ---
 
+### 5. ラリー削除
+
+指定したラリーを削除します。
+
+**エンドポイント**: `DELETE /functions/v1/rallies/:rally_id/`
+
+リクエスト
+
+```http
+DELETE /functions/v1/rallies/1/
+Content-Type: application/json
+Authorization: Bearer ${ANON_KEY}
+Cookie: ${COOKIE}
+```
+
+パスパラメータ
+
+| パラメータ | 型  | 説明     |
+| ---------- | --- | -------- |
+| rally_id   | int | ラリーID |
+
+---
+
 ## スポットAPI
 
-### 7. ラリースポット一覧取得
+### 1. ラリースポット一覧取得
 
 指定したラリーに登録されているスポットの一覧を取得します。
 
@@ -395,7 +419,7 @@ Cookie: ${COOKIE}
 
 ---
 
-### 8. ラリースポット登録
+### 2. ラリースポット登録
 
 指定したラリーに複数のスポットを一括登録します。
 
@@ -474,7 +498,7 @@ Cookie: ${COOKIE}
 
 ---
 
-### 9. ラリースポット詳細取得
+### 3. ラリースポット詳細取得
 
 指定したラリーの特定スポットの詳細情報を取得します。
 
@@ -522,7 +546,7 @@ Cookie: ${COOKIE}
 
 ## 評価API
 
-### 10. 評価一覧取得
+### 1. 評価一覧取得
 
 指定したラリーの全スポットの評価一覧を取得します。
 
@@ -584,7 +608,7 @@ Cookie: ${COOKIE}
 
 ---
 
-### 11. 評価作成
+### 2. 評価作成
 
 指定したラリーの特定スポットに評価を登録します。
 
@@ -655,7 +679,7 @@ Cookie: ${COOKIE}
 
 ---
 
-### 12. 評価詳細取得
+### 3. 評価詳細取得
 
 指定したラリーの特定スポットの評価詳細を取得します。
 
@@ -715,7 +739,6 @@ Cookie: ${COOKIE}
 
 ```json
 {
-  "error": "エラーメッセージ",
   "message": "詳細な説明"
 }
 ```
