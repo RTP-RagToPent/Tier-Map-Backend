@@ -96,6 +96,16 @@ class SupabaseRallyRepository implements IRallyRepository {
         },
       );
   }
+
+  async delete(rallyId: Id): Promise<void> {
+    const { error } = await this.client.from("rallies")
+      .delete()
+      .eq("id", rallyId.getValue());
+
+    if (error) {
+      throw new Error(`Error deleting rally: ${error.message}`);
+    }
+  }
 }
 
 export { SupabaseRallyRepository };
