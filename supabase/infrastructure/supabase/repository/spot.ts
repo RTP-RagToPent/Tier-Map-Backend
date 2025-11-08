@@ -15,7 +15,7 @@ class SupabaseSpotRepository implements ISpotRepository {
     return await this.client.from("spots")
       .select("id, name")
       .eq("id", spotId.getValue())
-      .single()
+      .maybeSingle()
       .then(({ data, error }) => {
         if (error) {
           throw new Error(`Error fetching spot by ID: ${error.message}`);

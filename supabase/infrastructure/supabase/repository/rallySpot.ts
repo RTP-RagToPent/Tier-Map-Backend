@@ -4,6 +4,15 @@ import type { IRallySpotRepository } from "../../../domain/rallySpot/repository.
 import { Id as SpotId } from "../../../domain/spot/models/Id.ts";
 import { createSupabaseClient } from "../client.ts";
 
+type RallySpotWithSpot = {
+  order_no: number;
+  spot_id: string;
+  spots: {
+    id: string;
+    name: string;
+  };
+};
+
 class SupabaseRallySpotRepository implements IRallySpotRepository {
   private readonly client;
 
@@ -27,8 +36,8 @@ class SupabaseRallySpotRepository implements IRallySpotRepository {
         if (error) {
           throw new Error(`Error fetching rally spots: ${error.message}`);
         }
-        return data.map((row) => {
-          const spot = row.spots[0];
+        return (data as unknown as RallySpotWithSpot[]).map((row) => {
+          const spot = row.spots;
 
           if (!spot) {
             throw new Error("Associated spot data is missing");
@@ -65,13 +74,14 @@ class SupabaseRallySpotRepository implements IRallySpotRepository {
             `Error fetching rally spot by ID: ${error.message}`,
           );
         }
-        const spot = data.spots[0];
+        const typedData = data as unknown as RallySpotWithSpot;
+        const spot = typedData?.spots;
 
-        return (data && spot)
+        return (typedData && spot)
           ? RallySpot.of({
             spotId: spot.id,
             spotName: spot.name,
-            orderNo: data.order_no,
+            orderNo: typedData.order_no,
           })
           : null;
       });
@@ -101,10 +111,10 @@ class SupabaseRallySpotRepository implements IRallySpotRepository {
         if (error) {
           throw new Error(`Error creating rally spots: ${error.message}`);
         }
-        return data.map((row) => {
-          const spot = row.spots[0];
+        return (data as unknown as RallySpotWithSpot[]).map((row) => {
+          const spot = row.spots;
           if (!spot) {
-            throw new Error("Associated spot data is missing");
+            throw new Error("createMany Associated spot data is missing");
           }
 
           return RallySpot.of({

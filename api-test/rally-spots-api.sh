@@ -47,6 +47,7 @@ echo "ログイン中..."
 LOGIN_RESPONSE=$(curl -s -X POST "${SUPABASE_URL}/auth/v1/token?grant_type=password" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${ANON_KEY}" \
+  -H "apikey: ${ANON_KEY}" \
   -d "{\"email\":\"${USER_EMAIL}\",\"password\":\"${USER_PASSWORD}\"}")
 
 # トークンを抽出
