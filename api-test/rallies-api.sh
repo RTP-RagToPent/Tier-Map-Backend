@@ -211,6 +211,66 @@ echo "レスポンス:"
 echo "$BODY" | jq '.' 2>/dev/null || echo "$BODY"
 echo ""
 
+# ============================================================
+# ステップ 7: DELETE /functions/v1/rallies/:id - ラリー削除（任意）
+# ============================================================
+echo -e "${GREEN}[STEP 7] ラリー削除 (DELETE /:id) - 任意${NC}"
+echo "作成したラリー (ID: ${CREATED_ID}) を削除しますか？"
+read -p "削除する場合は 'yes' を入力してください: " DELETE_CONFIRM
+
+if [ "$DELETE_CONFIRM" = "yes" ]; then
+  echo ""
+  echo "実行するコマンド:"
+  echo "curl -X DELETE '${API_URL}/${CREATED_ID}' \\"
+  echo "  -H 'Content-Type: application/json' \\"
+  echo "  -H 'Cookie: sb-access-token=\${ACCESS_TOKEN}; sb-refresh-token=\${REFRESH_TOKEN}' \\"
+  echo "  -H 'Authorization: Bearer \${ANON_KEY}' \\"
+  echo "  -v"
+  echo ""
+
+  DELETE_RESPONSE=$(curl -s -X DELETE "${API_URL}/${CREATED_ID}" \
+    -H "Content-Type: application/json" \
+    -H "Cookie: ${COOKIE}" \
+    -H "Authorization: Bearer ${ANON_KEY}" \
+    -w "\nHTTP_STATUS:%{http_code}")
+
+  HTTP_STATUS=$(echo "$DELETE_RESPONSE" | grep "HTTP_STATUS" | cut -d':' -f2)
+  BODY=$(echo "$DELETE_RESPONSE" | sed '/HTTP_STATUS/d')
+
+  echo "ステータスコード: ${HTTP_STATUS}"
+  echo "レスポンス:"
+  echo "$BODY" | jq '.' 2>/dev/null || echo "$BODY"
+  echo ""
+
+  if [ "$HTTP_STATUS" = "200" ] || [ "$HTTP_STATUS" = "204" ]; then
+    echo -e "${GREEN}✅ 削除成功${NC}"
+    echo ""
+
+    # 削除後の一覧確認
+    echo -e "${GREEN}[確認] 削除後の一覧取得${NC}"
+    GET_RESPONSE=$(curl -s -X GET "${API_URL}/" \
+      -H "Content-Type: application/json" \
+      -H "Cookie: ${COOKIE}" \
+      -H "Authorization: Bearer ${ANON_KEY}" \
+      -w "\nHTTP_STATUS:%{http_code}")
+
+    HTTP_STATUS=$(echo "$GET_RESPONSE" | grep "HTTP_STATUS" | cut -d':' -f2)
+    BODY=$(echo "$GET_RESPONSE" | sed '/HTTP_STATUS/d')
+
+    echo "ステータスコード: ${HTTP_STATUS}"
+    echo "レスポンス:"
+    echo "$BODY" | jq '.' 2>/dev/null || echo "$BODY"
+    echo ""
+  else
+    echo -e "${RED}❌ 削除失敗${NC}"
+    echo ""
+  fi
+else
+  echo ""
+  echo -e "${BLUE}削除をスキップしました。ラリー (ID: ${CREATED_ID}) は残ります。${NC}"
+  echo ""
+fi
+
 # 終了
 echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}テスト完了${NC}"

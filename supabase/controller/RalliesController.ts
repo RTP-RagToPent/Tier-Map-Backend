@@ -3,6 +3,7 @@ import {
   CreateRallyUseCase,
   type CreateRallyUseCaseRequest,
 } from "../usecase/rally/CreateUseCase.ts";
+import { DeleteUseCase } from "../usecase/rally/DeleteUseCase.ts";
 import { ListRallyUseCase } from "../usecase/rally/ListUseCase.ts";
 import { ShowRallyUseCase } from "../usecase/rally/ShowUseCase.ts";
 import {
@@ -35,6 +36,12 @@ class RalliesController {
     const repository = new SupabaseRallyRepository(this.accessToken);
     const useCase = new UpdateRallyUseCase(repository);
     return await useCase.execute(request);
+  }
+
+  async delete(rallyId: number) {
+    const repository = new SupabaseRallyRepository(this.accessToken);
+    const useCase = new DeleteUseCase(repository);
+    return await useCase.execute(rallyId);
   }
 }
 

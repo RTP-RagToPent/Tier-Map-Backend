@@ -8,6 +8,7 @@ type IRallyRepository = {
   findById(rallyId: Id): Promise<Rally | null>;
   create(name: Name, genre: Genre, profileId: number): Promise<Rally>;
   update(rally: Rally): Promise<Rally>;
+  delete(rallyId: Id): Promise<void>;
 };
 
 export type { IRallyRepository };

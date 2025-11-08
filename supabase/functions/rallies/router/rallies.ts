@@ -119,6 +119,32 @@ export async function ralliesRouter({
           headers: corsHeaders,
         });
       }
+    } else if (method === "DELETE") {
+      try {
+        if (!rallyId || isNaN(rallyId)) {
+          const { status, message } = httpResponse.INVALID_ID;
+          return new Response(JSON.stringify({ message }), {
+            status,
+            headers: corsHeaders,
+          });
+        }
+
+        await ralliesController.delete(rallyId);
+        const { status } = httpResponse.NO_CONTENT;
+
+        return new Response(null, {
+          status,
+          headers: corsHeaders,
+        });
+      } catch (error) {
+        errorLog({ title: "RalliesRouter", error });
+
+        const { status, message } = httpResponse.INTERNAL_SERVER_ERROR;
+        return new Response(JSON.stringify({ message }), {
+          status,
+          headers: corsHeaders,
+        });
+      }
     }
   }
 
