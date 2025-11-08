@@ -7,6 +7,7 @@ import { httpResponse } from "../../lib/httpResponse.ts";
 import { errorLog } from "../../lib/log.ts";
 import { parseInt } from "../../lib/parse.ts";
 import { ralliesRouter } from "./router/rallies.ts";
+import { rallySpotsRouter } from "./router/spots.ts";
 
 console.log("Rallies API Function!");
 
@@ -68,6 +69,7 @@ Deno.serve(async (req: Request) => {
     }
 
     const rallyId = pathLength >= 2 ? parseInt(paths[1]) : undefined;
+    const spotId = pathLength >= 4 ? paths[3] : undefined;
 
     try {
       if (pathLength == 1 || pathLength == 2) {
@@ -75,6 +77,18 @@ Deno.serve(async (req: Request) => {
           req,
           profileId,
           rallyId,
+          accessToken,
+          method,
+          pathLength,
+          corsHeaders,
+        });
+      } else if (
+        pathLength >= 3 && paths[2] === "spots" && rallyId !== undefined
+      ) {
+        return await rallySpotsRouter({
+          req,
+          rallyId,
+          spotId,
           accessToken,
           method,
           pathLength,
