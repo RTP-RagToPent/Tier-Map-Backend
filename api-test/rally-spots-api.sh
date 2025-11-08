@@ -15,7 +15,7 @@ NC='\033[0m'
 # Supabase ローカル環境の設定
 SUPABASE_URL="http://localhost:54321"
 # TODO: ここにあなたのSupabaseプロジェクトのAnonキーを設定してください
-ANON_KEY="__PLACEHOLDER_ANON_KEY__"
+ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0"
 
 echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}Rally Spots API テスト${NC}"
@@ -47,6 +47,7 @@ echo "ログイン中..."
 LOGIN_RESPONSE=$(curl -s -X POST "${SUPABASE_URL}/auth/v1/token?grant_type=password" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${ANON_KEY}" \
+  -H "apikey: ${ANON_KEY}" \
   -d "{\"email\":\"${USER_EMAIL}\",\"password\":\"${USER_PASSWORD}\"}")
 
 # トークンを抽出
